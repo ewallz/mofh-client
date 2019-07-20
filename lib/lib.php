@@ -6,8 +6,6 @@
  * https://github.com/hostronavt
 */
 
-ini_set('display_errors',1);
-error_reporting(E_ERROR);
 require_once('reader.php');
 
 class Panel {
