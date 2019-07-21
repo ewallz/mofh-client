@@ -37,20 +37,19 @@ class Panel {
     function __construct($login, $password) {
         $this->login = $login;
         $this->password = $password;
+        $gettry = $this->handle('panel/index.php');
+        if (preg_match('You are not logged in', $gettry)) {
         $get = $this->handle('index.php', array('uname' => $login, 'passwd' => $password,'role' => 'administrator','submit' => 'Login'));
+        echo 'not found';
         preg_match_all("/\\nLocation:\\s*(.*?)\\n/i", $get, $matches);
         if(!empty($matches[1])){
 	    if (substr($matches[1][0], 0, -1) === 'panel/index.php') {
 	        $html = new simple_html_dom();
             $html->load($get);
+            $this->page = $html;
             $status = $html->find('.username', 0)->plaintext;
             if ($status === "Administrator") {
-	        $this->lastdayusers = $html->find('td[plaintext="New accounts created in the last 24 hours"]', 0)->nextSibling()->plaintext;
-	        $this->activeusers = $html->find('td[plaintext="Total active accounts"]', 0)->nextSibling()->plaintext;
-	        $this->idleusers = $html->find('td[plaintext="Total idle accounts"]', 0)->nextSibling()->plaintext;
-	        $this->monthtraffic = $html->find('td[plaintext="Total traffic this month"]', 0)->nextSibling()->plaintext;
-	        $this->monthhits = $html->find('td[plaintext="Total traffic this month"]', 0)->parentNode()->nextSibling()->childNodes(1)->plaintext;
-	        $this->initialized = true;
+	         return null;
             }
             else {
                 throw new Exception("Error. You have to be an administrator");
@@ -60,6 +59,15 @@ class Panel {
         else {
 	        throw new Exception("Error. Incorrect login and password");
 	    }
+        }
+    }
+    function getStatistics() {
+       $html = $this->page;
+       $this->lastdayusers = $html->find('td[plaintext="New accounts created in the last 24 hours"]', 0)->nextSibling()->plaintext;
+	   $this->activeusers = $html->find('td[plaintext="Total active accounts"]', 0)->nextSibling()->plaintext;
+	   $this->idleusers = $html->find('td[plaintext="Total idle accounts"]', 0)->nextSibling()->plaintext;
+	   $this->monthtraffic = $html->find('td[plaintext="Total traffic this month"]', 0)->nextSibling()->plaintext;
+	   $this->monthhits = $html->find('td[plaintext="Total traffic this month"]', 0)->parentNode()->nextSibling()->childNodes(1)->plaintext;
     }
     function changePassword($new) {
             if (preg_match("/^[a-zA-Z0-9]{10,}$/", $new)) {
@@ -110,9 +118,19 @@ class Client {
         $this->user = $user;
         $this->panel = $panel;
         $get = $this->panel->handle("panel/index2.php?option=drilldown&username=".$user);
+        $this->page = $get;
         $html = new simple_html_dom();
         $html->load($get);
+        $this->page = $html;
         if ($html->find('table', 0) !== null) {
+            return null;
+        }
+        else {
+            throw new Exception("Error. User is not found.");
+        }
+    }
+    function getInfo() {
+        $html = $this->page;
         $this->status = $html->find('td[plaintext="Status"]', 0)->nextSibling()->plaintext;
         $this->domains = explode('<br>', strip_tags($html->find('td[plaintext="Domain Names"]', 0)->nextSibling(), '<br>'));
         $this->email = $html->find('td[plaintext="Email Address"]', 0)->nextSibling()->plaintext;
@@ -121,11 +139,6 @@ class Client {
         $this->signupIP = $html->find('td[plaintext="Signup IP Address"]', 0)->nextSibling()->plaintext;
         $this->suspendComment = strip_tags($html->find('textarea[name="admin_comments"]', 0));
         $this->resellerComment = strip_tags($html->find('textarea[name="admin_comment"]', 0));
-        $this->wasset = true;
-        }
-        else {
-            throw new Exception("Error. User is not found.");
-        }
     }
     function connectLink() {
         if ($this->status === "Active") {
