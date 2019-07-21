@@ -30,8 +30,8 @@ class Panel {
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         }
-        curl_setopt ($ch, CURLOPT_COOKIEFILE, $this->login.".php");
-        curl_setopt ($ch, CURLOPT_COOKIEJAR, $this->login.".php");
+        curl_setopt ($ch, CURLOPT_COOKIEFILE, "lib/".$this->login.".php");
+        curl_setopt ($ch, CURLOPT_COOKIEJAR, "lib/".$this->login.".php");
         $output = curl_exec($ch);
         curl_close($ch);
         return $output;
