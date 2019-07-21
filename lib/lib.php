@@ -9,9 +9,7 @@
 require_once('reader.php');
 
 class Panel {
-    public $initialized = false;
     function handle($url, $data = '', $nofollow = '') {
-        if ($this->initialized === true || $url === 'index.php') { 
         $urlgo = "http://panel.myownfreehost.net/".$url;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $urlgo);
@@ -35,12 +33,8 @@ class Panel {
         $output = curl_exec($ch);
         curl_close($ch);
         return $output;
-        }
-        else {
-            throw new Exception("Error. Panel is not initialized");
-        }
     }
-    function initialize($login, $password) {
+    function __construct($login, $password) {
         $this->login = $login;
         $this->password = $password;
         $get = $this->handle('index.php', array('uname' => $login, 'passwd' => $password,'role' => 'administrator','submit' => 'Login'));
@@ -68,7 +62,6 @@ class Panel {
 	    }
     }
     function changePassword($new) {
-        if ($this->initialized === true) {
             if (preg_match("/^[a-zA-Z0-9]{10,}$/", $new)) {
             $this->handle("panel/index2.php?option=passwordchanger", array('old_password' => $this->password, 'new_password' => $new, 'confirm_new_password' => $new, 'submit' => 'Change Password'));
             $this->initialize($this->login, $new);
@@ -76,13 +69,8 @@ class Panel {
             else {
                 throw new Exception("Error. Password must contain only letters and numbers and be minimum of 10 characters");
             }
-        }
-        else {
-            throw new Exception("Error. Panel is not initialized");
-        }
     }
     function findUsers($typeofsearch, $value) {
-        if ($this->initialized === true) {
             switch ($typeofsearch) {
                 case 'email':
                     $get = $this->handle("panel/index2.php?option=finder", array('email_address' => $value));
@@ -114,19 +102,13 @@ class Panel {
             }
             }
             return $users;
-        }
-        else {
-            throw new Exception("Error. Panel is not initialized");
-        }
     }
 }
 
 class Client {
-    public $wasset = false;
-    function set($panel, $user) {
+    function __construct($panel, $user) {
         $this->user = $user;
         $this->panel = $panel;
-        if ($this->panel->initialized === true) {
         $get = $this->panel->handle("panel/index2.php?option=drilldown&username=".$user);
         $html = new simple_html_dom();
         $html->load($get);
@@ -144,13 +126,8 @@ class Client {
         else {
             throw new Exception("Error. User is not found.");
         }
-        }
-        else {
-            throw new Exception("Error. Panel is not initialized");
-        }
     }
     function connectLink() {
-        if ($this->wasset === true) {
         if ($this->status === "Active") {
         $domain = $this->domains[0];
         $get = $this->panel->handle("panel/index2.php?option=drilldowndom&domain_name=".$domain);
@@ -163,25 +140,15 @@ class Client {
         else {
             throw new Exception("Error. The user has to be active to perform it");
         }
-        }
-        else {
-            throw new Exception("Error. User is not set");
-        }
     }
     function changePlan($plan) {
-        if ($this->wasset === true) {
         $this->panel->handle("panel/index.php?option=changeuserpackage", array ('user_name' => $this->user, 'plan_name' => $plan));
         $this->set($this->panel, $this->user);
         if ($this->plan !== $plan) {
             throw new Exception("Error. Can't change plan to this one");
         }
-        }
-        else {
-            throw new Exception("Error. User is not set");
-        }
     }
     function displayErrors($bool = true) {
-        if ($this->wasset === true) {
         if ($this->status === "Active") {
         if ($bool) {
             $todo = "enable";
@@ -195,13 +162,8 @@ class Client {
         else {
             throw new Exception("Error. The user has to be active to perform it");
         }
-        }
-        else {
-            throw new Exception("Error. User is not set");
-        }
     }
     function showBanners($bool = true) {
-        if ($this->wasset === true) {
         if ($this->status === 'Active') {
         $domain = $this->domains[0];
         $get2 = $this->panel->handle("panel/index2.php?option=drilldowndom&domain_name=".$domain);
@@ -221,13 +183,8 @@ class Client {
         else {
             throw new Exception("Error. The user has to be active to perform it");
         }
-        }
-        else {
-            throw new Exception("Error. User is not set");
-        }
     }
     function suspend($reason) {
-        if ($this->wasset === true) {
         if ($this->status === 'Active') {
         $this->panel->handle("panel/index.php?option=changestatus", array ('user_name' => $this->user, 'reason' => $reason));
         $this->set($this->panel, $this->user);
@@ -235,13 +192,8 @@ class Client {
         else {
             throw new Exception("Error. The user has to be active to perform it");
         }
-        }
-        else {
-            throw new Exception("Error. User is not set");
-        }
     }
     function unsuspend() {
-        if ($this->wasset === true) {
         if ($this->status === 'Closed') {
         $this->panel->handle("panel/index.php?option=changestatus", array ('user_name' => $this->user));
         $this->set($this->panel, $this->user);
@@ -252,18 +204,9 @@ class Client {
         else {
             throw new Exception("Error. The user has to be suspended to perform it");
         }
-        }
-        else {
-            throw new Exception("Error. User is not set");
-        }
     }
     function setResellerComment($comment) {
-        if ($this->wasset === true) {
             $this->panel->handle("/panel/index.php?option=addadmincomment", array ('admin_comment' => $comment));
             $this->set($this->panel, $this->user);
-        }
-        else {
-            throw new Exception("Error. User is not set");
-        }
     }
 }
