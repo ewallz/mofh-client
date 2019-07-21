@@ -47,8 +47,7 @@ $client = new Client($panel, $username);
 ```
 Below are functions:
 ```php
-$client->getInfo();
-// Collects following info:
+// Variables
 echo $client->status; // Account status, 'Active' for example
 echo $client->email; // Client's email
 echo $client->plan; // Hosting plan
@@ -57,7 +56,8 @@ echo $client->signupIP; // Signup IP
 echo $client->suspendComment // Comment, why user was suspended **
 echo $client->resellerComment // Your comment on client
 var_dump($client->domains); // Array of user domains *
-//
+
+// Functions
 
 $link = $client->connectLink(); // Returns a direct link to connect to cPanel *
 $client->displayErrors($bool); // True - client will see errors, false - not *
@@ -80,10 +80,8 @@ This code checks if the user is suspended and and unsuspends it.
 require_once('lib/lib.php');
 
 try {
-$panel = new Panel();
-$panel->initialize('mymail@gmail.com', 'mypassword');
-$client = new Client();
-$client->set($panel, 'onavt_24120903');
+$panel = new Panel('mymail@gmail.com', 'mypassword');
+$client = new Client($panel, 'onavt_24120903');
 if ($client->status === "Closed") {
 $client->unsuspend();
 }
