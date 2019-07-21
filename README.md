@@ -22,18 +22,16 @@ Firstly, initialize panel connection with initialize function and your account c
 ```php
 $panel = new Panel($login, $password);
 ```
-Then you have already an access to following variables and functions:
+Then you have already an access to following functions:
 ```php
-// Variables
-
+$panel->getStatistics(); 
+// You will have access to following:
 echo $panel->lastdayusers; // New accounts created in last 24 hours
 echo $panel->activeusers; // Total active accounts
 echo $panel->idleusers; // Total idle users
 echo $panel->monthtraffic; // Total traffic this month
 echo $panel->monthhits; // Total hits this month
-
-
-// Functions
+//
 
 $panel->changePassword($newpassword); // Changes MyOwnFreeHost account password
 // Note: MyOwnFreeHost account password has to be 10 characters minimum, only letters and numbers
@@ -47,10 +45,10 @@ You have to give two parametres to start: Panel() class variable and username:
 ```php
 $client = new Client($panel, $username);
 ```
-Below are variables and functions:
+Below are functions:
 ```php
-//  Variables
-
+$client->getInfo();
+// Collects following info:
 echo $client->status; // Account status, 'Active' for example
 echo $client->email; // Client's email
 echo $client->plan; // Hosting plan
@@ -59,9 +57,7 @@ echo $client->signupIP; // Signup IP
 echo $client->suspendComment // Comment, why user was suspended **
 echo $client->resellerComment // Your comment on client
 var_dump($client->domains); // Array of user domains *
-
-
-// Functions
+//
 
 $link = $client->connectLink(); // Returns a direct link to connect to cPanel *
 $client->displayErrors($bool); // True - client will see errors, false - not *
