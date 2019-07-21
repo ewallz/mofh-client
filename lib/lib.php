@@ -121,17 +121,8 @@ class Client {
         $this->page = $get;
         $html = new simple_html_dom();
         $html->load($get);
-        $this->page = $html;
         if ($html->find('table', 0) !== null) {
-            return null;
-        }
-        else {
-            throw new Exception("Error. User is not found.");
-        }
-    }
-    function getInfo() {
-        $html = $this->page;
-        $this->status = $html->find('td[plaintext="Status"]', 0)->nextSibling()->plaintext;
+         $this->status = $html->find('td[plaintext="Status"]', 0)->nextSibling()->plaintext;
         $this->domains = explode('<br>', strip_tags($html->find('td[plaintext="Domain Names"]', 0)->nextSibling(), '<br>'));
         $this->email = $html->find('td[plaintext="Email Address"]', 0)->nextSibling()->plaintext;
         $this->plan = strip_tags($html->find('option[selected]', 0));
@@ -139,6 +130,10 @@ class Client {
         $this->signupIP = $html->find('td[plaintext="Signup IP Address"]', 0)->nextSibling()->plaintext;
         $this->suspendComment = strip_tags($html->find('textarea[name="admin_comments"]', 0));
         $this->resellerComment = strip_tags($html->find('textarea[name="admin_comment"]', 0));
+        }
+        else {
+            throw new Exception("Error. User is not found.");
+        }
     }
     function connectLink() {
         if ($this->status === "Active") {
