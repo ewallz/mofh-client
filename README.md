@@ -20,8 +20,7 @@ Then you can use our classes and functions.
 ### Panel() class
 Firstly, initialize panel connection with initialize function and your account credentials:
 ```php
-$panel = new Panel();
-$panel->initialize($login, $password);
+$panel = new Panel($login, $password);
 ```
 Then you have already an access to following variables and functions:
 ```php
@@ -46,8 +45,7 @@ $users = $panel->findUsers($typeofsearch, $value); // Returns array with usernam
 To use Client() class you have to have Panel() one initialized.
 You have to give two parametres to start: Panel() class variable and username:
 ```php
-$client = new Client();
-$client->set($panel, $username);
+$client = new Client($panel, $username);
 ```
 Below are variables and functions:
 ```php
