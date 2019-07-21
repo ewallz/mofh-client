@@ -38,7 +38,7 @@ class Panel {
         $this->login = $login;
         $this->password = $password;
         $gettry = $this->handle('panel/index.php');
-        if (preg_match('You are not logged in', $gettry)) {
+        if (strpos($gettry, 'Go To Login')) {
         $get = $this->handle('index.php', array('uname' => $login, 'passwd' => $password,'role' => 'administrator','submit' => 'Login'));
         echo 'not found';
         preg_match_all("/\\nLocation:\\s*(.*?)\\n/i", $get, $matches);
