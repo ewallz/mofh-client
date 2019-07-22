@@ -72,7 +72,7 @@ class Panel {
     function changePassword($new) {
             if (preg_match("/^[a-zA-Z0-9]{10,}$/", $new)) {
             $this->handle("panel/index2.php?option=passwordchanger", array('old_password' => $this->password, 'new_password' => $new, 'confirm_new_password' => $new, 'submit' => 'Change Password'));
-            $this->initialize($this->login, $new);
+            $this->__construct($this->login, $new);
             }
             else {
                 throw new Exception("Error. Password must contain only letters and numbers and be minimum of 10 characters");
