@@ -151,7 +151,7 @@ class Client {
     }
     function changePlan($plan) {
         $this->panel->handle("panel/index.php?option=changeuserpackage", array ('user_name' => $this->user, 'plan_name' => $plan));
-        $this->set($this->panel, $this->user);
+        $this->__construct($this->panel, $this->user);
         if ($this->plan !== $plan) {
             throw new Exception("Error. Can't change plan to this one");
         }
@@ -195,7 +195,7 @@ class Client {
     function suspend($reason) {
         if ($this->status === 'Active') {
         $this->panel->handle("panel/index.php?option=changestatus", array ('user_name' => $this->user, 'reason' => $reason));
-        $this->set($this->panel, $this->user);
+        $this->__construct($this->panel, $this->user);
         }
         else {
             throw new Exception("Error. The user has to be active to perform it");
@@ -204,7 +204,7 @@ class Client {
     function unsuspend() {
         if ($this->status === 'Closed') {
         $this->panel->handle("panel/index.php?option=changestatus", array ('user_name' => $this->user));
-        $this->set($this->panel, $this->user);
+        $this->__construct($this->panel, $this->user);
         if ($this->status === 'Closed') {
             throw new Exception("Error. Impossible to reactivate account");
         }
@@ -215,6 +215,6 @@ class Client {
     }
     function setResellerComment($comment) {
             $this->panel->handle("/panel/index.php?option=addadmincomment", array ('admin_comment' => $comment));
-            $this->set($this->panel, $this->user);
+            $this->__construct($this->panel, $this->user);
     }
 }
