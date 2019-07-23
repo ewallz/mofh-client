@@ -38,7 +38,7 @@ class Panel {
         $this->login = $login;
         $this->password = $password;
         $gettry = $this->handle('panel/index.php');
-	$this->page = $html;
+	$this->page = $gettry;
         if (strpos($gettry, 'Go To Login')) {
         $get = $this->handle('index.php', array('uname' => $login, 'passwd' => $password,'role' => 'administrator','submit' => 'Login'));
         preg_match_all("/\\nLocation:\\s*(.*?)\\n/i", $get, $matches);
