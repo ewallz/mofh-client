@@ -38,9 +38,9 @@ class Panel {
         $this->login = $login;
         $this->password = $password;
         $gettry = $this->handle('panel/index.php');
+	$this->page = $html;
         if (strpos($gettry, 'Go To Login')) {
         $get = $this->handle('index.php', array('uname' => $login, 'passwd' => $password,'role' => 'administrator','submit' => 'Login'));
-        echo 'not found';
         preg_match_all("/\\nLocation:\\s*(.*?)\\n/i", $get, $matches);
         if(!empty($matches[1])){
 	    if (substr($matches[1][0], 0, -1) === 'panel/index.php') {
