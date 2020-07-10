@@ -63,8 +63,8 @@ $link = $client->connectLink(); // Returns a direct link to connect to cPanel *
 $client->displayErrors($bool); // True - client will see errors, false - not *
 $client->showBanners($bool); // True - client will see ads (banners), false - not *
 $client->changePlan($newplan); // Changes client's plan (check out Set Packages in MOFH Panel)
-$client->suspend($reason); // Suspends user, give a string with reason **
-$client->unsuspend(); // Unsuspends user if possible *
+$client->suspend($reason); // Suspends user, give a string with reason *
+$client->unsuspend(); // Unsuspends user if possible **
 $client->setResellerComment($newcomment); // Changes string resellerComment
 
 // * Only when the user has Active status
