@@ -124,8 +124,9 @@ class Client {
         $html = new simple_html_dom();
         $html->load($get);
         if ($html->find('table', 0) !== null) {
-         $this->status = $html->find('td[plaintext="Status"]', 0)->nextSibling()->plaintext;
-        $this->domains = explode('<br>', strip_tags($html->find('td[plaintext="Domain Names"]', 0)->nextSibling(), '<br>'));
+        $this->status = $html->find('td[plaintext="Status"]', 0)->nextSibling()->plaintext;
+        $this->sql = $html->find('td[plaintext="SQL Cluster (server)"]', 0)->nextSibling()->plaintext;
+	$this->domains = explode('<br>', strip_tags($html->find('td[plaintext="Domain Names"]', 0)->nextSibling(), '<br>'));
         $this->email = $html->find('td[plaintext="Email Address"]', 0)->nextSibling()->plaintext;
         $this->plan = strip_tags($html->find('option[selected]', 0));
         $this->signupDate = $html->find('td[plaintext="Signup date"]', 0)->nextSibling()->plaintext;
